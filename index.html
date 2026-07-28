@@ -365,7 +365,7 @@
   </div>
 </footer>
 
-<script src="assets/main.js"></script>
+
 <script>
 document.getElementById('navToggle').addEventListener('click',function(){
   document.getElementById('mainNav').classList.toggle('open');
@@ -427,5 +427,33 @@ document.getElementById('navToggle').addEventListener('click',function(){
 })();
 </script>
 
+
+<!-- CORNER CHAT WIDGET (demo mode in preview) -->
+<div class="ibc-chat" id="ibcChat"
+  data-endpoint=""
+  data-areas="Salem, Keizer, Turner, Aumsville, Sublimity, Stayton, Jefferson, Millersburg, Albany, Woodburn"
+  data-pricing="Monthly Clean — $30 every 4 weeks
+Quarterly Clean — $45 every 12 weeks (limited-time, reg. $60)
+On-Demand Clean — $65 one time (limited-time, reg. $75)
+
+All plans include 2 bins — $10 for each additional bin."
+  data-pricing-url="#pricing"
+  data-how-url="#how">
+  <button class="ibc-chat-bubble" id="ibcChatBubble" aria-label="Chat with us" aria-expanded="false">
+    <svg class="ic-chat" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.9 2 11.7c0 2.2 1 4.3 2.6 5.8-.2 1.5-.8 2.9-1.7 4 1.9-.2 3.7-.9 5.2-2 1.2.4 2.5.6 3.9.6 5.5 0 10-3.9 10-8.7S17.5 3 12 3z"/></svg>
+    <svg class="ic-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3z"/></svg>
+    <span class="ibc-chat-dot"></span>
+  </button>
+  <div class="ibc-chat-panel" hidden>
+    <div class="ibc-chat-head">
+      <img src="assets/logo.png" alt="">
+      <div><strong>It&rsquo;s Bin Cleaned</strong><span>We usually reply by text within the hour</span></div>
+      <button class="ibc-chat-x" aria-label="Close chat">&times;</button>
+    </div>
+    <div class="ibc-chat-body"></div>
+    <div class="ibc-chat-chips"></div>
+  </div>
+</div>
+<script src="assets/main.js"></script>
 </body>
 </html>
