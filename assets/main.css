@@ -307,3 +307,34 @@ textarea{min-height:120px;resize:vertical}
   .section{padding:64px 0}
   .footer-grid{grid-template-columns:1fr}
 }
+
+/* ============================================================
+   Limited-time offer: strike pricing + email-unlock popup
+   ============================================================ */
+.offer-flag{display:inline-block;background:#fdecec;color:#c0392b;font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:5px 14px;border-radius:999px;margin-bottom:10px}
+.price-compare{display:inline-block;font-family:var(--font-display);font-weight:800;font-size:2rem;color:#c0392b;position:relative;margin-right:12px;vertical-align:super;opacity:.85}
+.price-compare::after{content:"";position:absolute;left:-6%;right:-6%;top:50%;height:3px;background:#c0392b;border-radius:2px;transform:rotate(-8deg)}
+.offer-link{background:none;border:0;cursor:pointer;font-family:inherit;font-weight:700;font-size:.9rem;color:var(--orange-dark);text-decoration:underline;text-underline-offset:3px;margin:-12px 0 18px;padding:0}
+.offer-link:hover{color:var(--orange)}
+
+.ibc-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.ibc-modal[hidden]{display:none}
+.ibc-modal-backdrop{position:absolute;inset:0;background:rgba(13,43,69,.72);backdrop-filter:blur(3px)}
+.ibc-modal-card{position:relative;z-index:2;background:#fff;border-radius:22px;box-shadow:var(--shadow-lg);max-width:480px;width:100%;padding:44px 38px 36px;text-align:center;animation:ibcPop .28s ease}
+@keyframes ibcPop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.ibc-modal-x{position:absolute;top:12px;right:16px;background:none;border:0;font-size:1.9rem;line-height:1;color:var(--muted);cursor:pointer;padding:6px}
+.ibc-modal-x:hover{color:var(--navy)}
+.ibc-modal-flag{display:inline-block;background:#fdecec;color:#c0392b;font-size:.74rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:6px 16px;border-radius:999px;margin-bottom:14px}
+.ibc-modal-flag.ok{background:rgba(86,185,71,.14);color:#3d8c31}
+.ibc-modal-card h3{font-size:1.9rem;line-height:1.1;margin-bottom:10px;color:var(--navy)}
+.ibc-modal-card h3 s{color:#c0392b;font-weight:800;text-decoration-thickness:3px}
+.ibc-modal-card h3 em{font-style:normal;color:var(--blue-dark)}
+.ibc-modal-card p{color:var(--muted);font-size:.98rem;margin-bottom:18px}
+.ibc-offer-form{display:flex;flex-direction:column;gap:12px;margin-bottom:6px}
+.ibc-offer-form input[type=email]{width:100%;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:1rem;background:#fbfdfe;text-align:center}
+.ibc-offer-form input[type=email]:focus{outline:none;border-color:var(--blue)}
+.ibc-hp{position:absolute;left:-9999px}
+.ibc-modal-fine{font-size:.76rem;color:var(--muted);margin-top:8px;margin-bottom:0}
+.ibc-offer-err{color:#c0392b;font-weight:600;font-size:.9rem}
+.ibc-offer-code{font-family:var(--font-display);font-weight:800;font-size:2.6rem;letter-spacing:.08em;color:var(--navy);background:var(--sky);border:2px dashed var(--blue);border-radius:14px;padding:14px 20px;margin:6px 0 16px}
+@media(max-width:560px){.ibc-modal-card{padding:36px 22px 28px}}

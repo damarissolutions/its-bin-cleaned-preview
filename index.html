@@ -16,7 +16,7 @@
   <div class="topbar">
     <div class="wrap">
       <span class="tb-areas">Serving Salem, Keizer, Turner, Aumsville, Sublimity, Stayton, Jefferson, Millersburg, Albany &amp; Woodburn</span>
-      <span>Call <a href="tel:9717887789">971-788-7789</a> &nbsp;·&nbsp; <a href="tel:8668058998">866-805-8998</a></span>
+      <span>Call <a href="tel:9717887789">971-788-7789</a></span>
     </div>
   </div>
   <div class="wrap nav-row">
@@ -123,24 +123,27 @@
         <span class="popular-tag">Most Popular</span>
         <h3>Quarterly Clean</h3>
         <p class="freq">Clean bins every 12 weeks</p>
-        <div class="price-amount"><sup>$</sup>45</div>
-        <p class="price-per">Every 12 weeks</p>
+        <div class="offer-flag">Limited-Time Offer</div>
+        <div class="price-amount"><span class="price-compare">$60</span><sup>$</sup>45</div>
+        <p class="price-per">Every 12 weeks &middot; with offer code</p>
         <ul class="price-includes">
           <li><strong>2 bins included</strong></li>
           <li>$10 each additional bin</li>
           <li>Regular cleaning without overdoing it</li>
         </ul>
+        <button type="button" class="offer-link js-open-offer">&#127881; Unlock the $45/quarter code</button>
         <a class="btn btn-primary" href="https://itsbincleanedor.iserviceroutes.com/checkout.html?prId=AEEMMD9C8D7D50AEBC8DDB5373598B0B365D0BDE9B2D2D3ED769F300CF2C013D10E8C121" target="_blank" rel="noopener">Book Online</a>
       </div>
       <div class="price-card">
-        <h3>One-Time</h3>
-        <p class="freq">Clean bins once</p>
-        <div class="price-amount"><sup>$</sup>65</div>
-        <p class="price-per">Once</p>
+        <h3>On-Demand Clean</h3>
+        <p class="freq">Try us out &mdash; a one-time deep clean</p>
+        <div class="offer-flag">Limited-Time Offer</div>
+        <div class="price-amount"><span class="price-compare">$75</span><sup>$</sup>65</div>
+        <p class="price-per">One visit &middot; no commitment</p>
         <ul class="price-includes">
           <li><strong>2 bins included</strong></li>
           <li>$10 each additional bin</li>
-          <li>A great first-time “test drive”</li>
+          <li>The perfect trial run before a quarterly plan</li>
         </ul>
         <a class="btn btn-blue" href="https://itsbincleanedor.iserviceroutes.com/checkout.html?prId=4XCGRHYX834A9719129636C5050FEE18B9396EC441D2B0BB9F63B7D4C4D0AAD18CBDCF39" target="_blank" rel="noopener">Book Online</a>
       </div>
@@ -341,7 +344,6 @@
       <h4>Get In Touch</h4>
       <ul>
         <li><a href="tel:9717887789">971-788-7789</a></li>
-        <li><a href="tel:8668058998">866-805-8998</a></li>
         <li><a href="mailto:itsbincleanedor@gmail.com">itsbincleanedor@gmail.com</a></li>
         <li>Salem, Oregon &amp; surrounding areas</li>
       </ul>
@@ -359,5 +361,61 @@ document.getElementById('navToggle').addEventListener('click',function(){
   document.getElementById('mainNav').classList.toggle('open');
 });
 </script>
+
+<!-- Limited-time quarterly offer popup (preview demo mode: email not stored) -->
+<div class="ibc-modal" id="ibcOfferModal" hidden data-code="CLEAN45">
+  <div class="ibc-modal-backdrop" data-close></div>
+  <div class="ibc-modal-card" role="dialog" aria-modal="true" aria-labelledby="ibcOfferTitle">
+    <button type="button" class="ibc-modal-x" data-close aria-label="Close">&times;</button>
+    <div class="ibc-modal-step" data-step="form">
+      <div class="ibc-modal-flag">&#127881; Limited-Time Offer</div>
+      <h3 id="ibcOfferTitle">Quarterly cleans: <s>$60</s> <em>$45</em>/quarter</h3>
+      <p>Enter your email to unlock our limited-time <b>$45 per quarterly clean</b> rate (normally $60). Your offer code appears instantly.</p>
+      <form class="ibc-offer-form" novalidate>
+        <p class="ibc-hp" aria-hidden="true"><input type="text" name="ibc_website" tabindex="-1" autocomplete="off"></p>
+        <input type="email" name="email" required placeholder="you@email.com" aria-label="Email address">
+        <button type="submit" class="btn btn-primary">Unlock My $45 Rate</button>
+      </form>
+      <p class="ibc-modal-fine">Prices include 2 bins. $10 for each additional bin. No spam &mdash; just your code and service reminders.</p>
+      <p class="ibc-offer-err" hidden>Please enter a valid email address.</p>
+    </div>
+    <div class="ibc-modal-step" data-step="done" hidden>
+      <div class="ibc-modal-flag ok">&#10003; Offer Unlocked</div>
+      <h3>Your code:</h3>
+      <div class="ibc-offer-code">CLEAN45</div>
+      <p>Use this code when you sign up for a <b>Quarterly Clean</b> to lock in $45/quarter.</p>
+      <a class="btn btn-primary btn-lg" href="https://itsbincleanedor.iserviceroutes.com/checkout.html?prId=AEEMMD9C8D7D50AEBC8DDB5373598B0B365D0BDE9B2D2D3ED769F300CF2C013D10E8C121" target="_blank" rel="noopener">Sign Up with My Code</a>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var modal = document.getElementById('ibcOfferModal');
+  if (!modal) return;
+  var KEY = 'ibc_offer_seen_preview';
+  function open() { modal.hidden = false; document.body.style.overflow = 'hidden'; }
+  function close() { modal.hidden = true; document.body.style.overflow = ''; try { localStorage.setItem(KEY, '1'); } catch (e) {} }
+  modal.addEventListener('click', function (e) { if (e.target.hasAttribute && e.target.hasAttribute('data-close')) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('.js-open-offer');
+    if (btn) { e.preventDefault(); open(); }
+  });
+  var seen = false;
+  try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
+  if (!seen) setTimeout(open, 2600);
+  modal.querySelector('.ibc-offer-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = modal.querySelector('input[type=email]').value.trim();
+    var err = modal.querySelector('.ibc-offer-err');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.hidden = false; return; }
+    err.hidden = true;
+    modal.querySelector('[data-step=form]').hidden = true;
+    modal.querySelector('[data-step=done]').hidden = false;
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+  });
+})();
+</script>
+
 </body>
 </html>

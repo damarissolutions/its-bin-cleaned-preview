@@ -84,3 +84,52 @@
 		});
 	}
 })();
+
+/* Limited-time quarterly offer popup */
+(function () {
+	var modal = document.getElementById('ibcOfferModal');
+	if (!modal) return;
+	var KEY = 'ibc_offer_seen';
+	function open() { modal.hidden = false; document.body.style.overflow = 'hidden'; }
+	function close() {
+		modal.hidden = true;
+		document.body.style.overflow = '';
+		try { localStorage.setItem(KEY, '1'); } catch (e) {}
+	}
+	modal.addEventListener('click', function (e) {
+		if (e.target.hasAttribute && e.target.hasAttribute('data-close')) close();
+	});
+	document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
+	document.addEventListener('click', function (e) {
+		var btn = e.target.closest && e.target.closest('.js-open-offer');
+		if (btn) { e.preventDefault(); open(); }
+	});
+	var seen = false;
+	try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
+	if (!seen) setTimeout(open, 2600);
+
+	var form = modal.querySelector('.ibc-offer-form');
+	form.addEventListener('submit', function (e) {
+		e.preventDefault();
+		var email = form.querySelector('input[type=email]').value.trim();
+		var err = modal.querySelector('.ibc-offer-err');
+		if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.hidden = false; return; }
+		err.hidden = true;
+		function reveal() {
+			modal.querySelector('[data-step=form]').hidden = true;
+			modal.querySelector('[data-step=done]').hidden = false;
+			try { localStorage.setItem(KEY, '1'); } catch (e) {}
+		}
+		var endpoint = modal.getAttribute('data-endpoint');
+		if (!endpoint) { reveal(); return; } /* static preview: demo mode */
+		var data = new FormData();
+		data.append('action', 'ibc_offer');
+		data.append('email', email);
+		data.append('page', window.location.href);
+		data.append('ibc_website', form.querySelector('[name=ibc_website]') ? form.querySelector('[name=ibc_website]').value : '');
+		fetch(endpoint, { method: 'POST', body: data })
+			.then(function (r) { return r.json(); })
+			.then(function (j) { if (j && j.ok) { reveal(); } else { err.textContent = 'Please enter a valid email address.'; err.hidden = false; } })
+			.catch(function () { reveal(); }); /* never strand the visitor: show the code even if the save failed */
+	});
+})();
