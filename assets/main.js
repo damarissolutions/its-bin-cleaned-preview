@@ -134,7 +134,7 @@
 	});
 })();
 
-/* Corner chat widget — guided question flow that routes to the right service */
+/* Corner chat widget — info topics + step-by-step signup flow */
 (function () {
 	var root = document.getElementById('ibcChat');
 	if (!root) return;
@@ -144,7 +144,7 @@
 	var chipsWrap = root.querySelector('.ibc-chat-chips');
 	var d = function (k) { return root.getAttribute('data-' + k) || ''; };
 	var endpoint = d('endpoint');
-	var areas = d('areas').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+	var areas = d('areas');
 	var P = {
 		month: parseInt(d('price-month'), 10) || 30,
 		quart: parseInt(d('price-quart'), 10) || 45,
@@ -152,8 +152,9 @@
 		regQuart: parseInt(d('regular-quart'), 10) || 60,
 		regOnce: parseInt(d('regular-once'), 10) || 75
 	};
-	var CHECKOUT = { month: d('checkout-month'), quart: d('checkout-quart'), once: d('checkout-once') };
-	var answers = {};
+	var CHECKOUT = { month: d('checkout-month'), quart: d('checkout-quart') };
+	var howUrl = d('how-url');
+	var lead = {};
 	var started = false;
 
 	function el(tag, cls, html) {
@@ -167,7 +168,7 @@
 	function setChips(list) {
 		chipsWrap.innerHTML = '';
 		(list || []).forEach(function (c) {
-			var b = el('button', 'ibc-chip', c.label);
+			var b = el('button', 'ibc-chip' + (c.primary ? ' primary' : ''), c.label);
 			b.type = 'button';
 			b.addEventListener('click', function () { c.run(); });
 			chipsWrap.appendChild(b);
@@ -184,163 +185,145 @@
 			if (after) after();
 		}, 480);
 	}
-	function ask(html, chips) { botSay(html, function () { setChips(chips); }); setChips([]); }
-	function pick(label, next) { return { label: label, run: function () { userSay(label.replace(/^[^\w$]+\s*/, '')); next(); } }; }
 
-	/* ---------- steps ---------- */
-	function stepStart() {
-		answers = {};
-		ask('👋 Hi there! Answer a couple of quick questions and I’ll point you to the right service. What can we help with?', [
-			pick('🗑️ Bin cleaning', function () { answers.service = 'Bin cleaning'; stepFreq(); }),
-			pick('💦 Pressure washing', function () { answers.service = 'Pressure washing'; stepPw(); }),
-			pick('💬 Something else', function () { answers.service = 'Other'; stepMessage('Sure — tell us what you need and we’ll text you back shortly. 👇'); })
-		]);
+	/* ---------- info topics ---------- */
+	function topicChips() {
+		return [
+			{ label: '🚀 Get Started', primary: true, run: startSignup },
+			{ label: '💰 Pricing & plans', run: function () {
+				userSay('Pricing & plans');
+				botSay('<b>Monthly Clean</b> — $' + P.month + ' every 4 weeks<br><b>Quarterly Clean</b> — <s style="color:#c0392b">$' + P.regQuart + '</s> $' + P.quart + ' every 12 weeks (limited-time)<br><b>On-Demand Clean</b> — <s style="color:#c0392b">$' + P.regOnce + '</s> $' + P.once + ' one time (limited-time)<br><br>All plans include 2 bins — $10 for each additional bin.', offerStart);
+			} },
+			{ label: '🗺️ Service area', run: function () {
+				userSay('Do you service my area?');
+				botSay('We currently serve:<br><b>' + areas + '</b><br><br>Close but not on the list? Get started anyway and drop your ZIP — we add routes as neighborhoods fill up!', offerStart);
+			} },
+			{ label: '🧽 How it works', run: function () {
+				userSay('How does it work?');
+				botSay('Easy as 1-2-3:<br><b>1.</b> Sign up online — pick a plan.<br><b>2.</b> We come the day after your trash pickup and deep-clean your bins curbside with 200° pressurized hot water.<br><b>3.</b> We sanitize, deodorize, and put them back where they belong.' + (howUrl && howUrl !== '#' ? '<br><a class="btn btn-blue" href="' + howUrl + '">Learn more</a>' : ''), offerStart);
+			} }
+		];
+	}
+	function offerStart() {
+		var wrap = el('div', 'ibc-msg bot', 'Ready when you are! 👇<br>');
+		var b = el('button', 'btn btn-primary', 'Get Started');
+		b.type = 'button';
+		b.addEventListener('click', startSignup);
+		wrap.appendChild(b);
+		body.appendChild(wrap);
+		scrollDown();
+		setChips(topicChips());
 	}
 
-	function stepFreq() {
-		ask('How often would you like your bins cleaned?', [
-			pick('Every month', function () { answers.plan = 'month'; stepBins(); }),
-			pick('Every 3 months', function () { answers.plan = 'quart'; stepBins(); }),
-			pick('Just once — trying it out', function () { answers.plan = 'once'; stepBins(); }),
-			pick('🤔 Not sure yet', function () {
-				answers.plan = 'quart';
-				botSay('No problem! Most of our customers pick the <b>Quarterly Clean</b> — fresh bins every 3 months without overdoing it. Let’s price that out (you can always switch).', stepBins);
-			})
-		]);
-	}
-
-	function stepBins() {
-		ask('How many bins should we clean? (trash, recycling, yard debris…)', [
-			pick('2 bins', function () { answers.bins = 2; stepCity(); }),
-			pick('3 bins', function () { answers.bins = 3; stepCity(); }),
-			pick('4 bins', function () { answers.bins = 4; stepCity(); }),
-			pick('Just 1', function () { answers.bins = 1; stepCity(); })
-		]);
-	}
-
-	function stepCity() {
-		var chips = areas.slice(0, 5).map(function (a) {
-			return pick(a, function () { answers.city = a; stepQuote(true); });
-		});
-		chips.push(pick('Another city…', function () { answers.city = ''; stepQuote(false); }));
-		ask('Which city are you in?', chips);
-	}
-
-	function planName(p) { return p === 'month' ? 'Monthly Clean' : p === 'quart' ? 'Quarterly Clean' : 'On-Demand Clean'; }
-	function planPer(p) { return p === 'month' ? 'every 4 weeks' : p === 'quart' ? 'every 12 weeks' : 'one time'; }
-
-	function stepQuote(inArea) {
-		var p = answers.plan;
-		var base = P[p === 'month' ? 'month' : p === 'quart' ? 'quart' : 'once'];
-		var extra = Math.max(0, (answers.bins || 2) - 2) * 10;
-		var total = base + extra;
-		var strike = p === 'quart' ? '$' + P.regQuart : p === 'once' ? '$' + P.regOnce : '';
-		var deal = strike ? ' <s style="color:#c0392b">' + strike + '</s>' : '';
-		var quote = '<b>' + planName(p) + '</b> · ' + (answers.bins || 2) + ' bin' + ((answers.bins || 2) > 1 ? 's' : '') +
-			'<br><span style="font-size:1.3em;font-weight:800">' + deal + ' $' + total + '</span> ' + planPer(p) +
-			(extra ? '<br><span style="font-size:.85em;color:#54677a">($' + base + ' + $' + extra + ' for ' + ((answers.bins) - 2) + ' extra bin' + (answers.bins - 2 > 1 ? 's' : '') + ')</span>' : '') +
-			(p === 'quart' ? '<br><span style="font-size:.85em;color:#54677a">🎉 Limited-time price — use the offer code from the site popup at checkout.</span>' : '');
-
-		if (inArea) {
-			botSay('🎉 Great news — <b>' + answers.city + '</b> is in our service area!', function () {
-				botSay('Here’s your quote:<br><br>' + quote + '<br><a class="btn btn-primary" href="' + CHECKOUT[p] + '" target="_blank" rel="noopener">Book ' + planName(p) + ' →</a>', function () {
-					setChips([
-						pick('✉️ Text me instead', function () { stepMessage('Sure! Leave your info and we’ll text you to get you set up. 👇'); }),
-						pick('🔄 Start over', stepStart)
-					]);
-				});
+	/* ---------- step-by-step signup ---------- */
+	function askInput(opts) {
+		botSay(opts.question, function () {
+			chipsWrap.innerHTML = '';
+			var f = el('form', 'ibc-chat-inputrow');
+			f.innerHTML = '<input type="' + (opts.type || 'text') + '" placeholder="' + opts.placeholder + '" autocomplete="' + (opts.autocomplete || 'on') + '"' + (opts.inputmode ? ' inputmode="' + opts.inputmode + '"' : '') + ' required><button type="submit" class="btn btn-primary" aria-label="Send">➤</button>';
+			var input = f.querySelector('input');
+			f.addEventListener('submit', function (e) {
+				e.preventDefault();
+				var v = input.value.trim();
+				var err = opts.validate ? opts.validate(v) : '';
+				if (err) {
+					botSay(err);
+					return;
+				}
+				userSay(v);
+				chipsWrap.innerHTML = '';
+				opts.next(v);
 			});
-		} else {
-			botSay('We might still be able to reach you — we add routes as neighborhoods fill up. Here’s the quote either way:<br><br>' + quote, function () {
-				stepMessage('Leave your name, number, and city — we’ll text you to confirm whether we can service your address. 👇');
-			});
-		}
+			chipsWrap.appendChild(f);
+			input.focus();
+		});
+		setChips([]);
 	}
 
-	function stepPw() {
-		ask('What needs washing?', [
-			pick('Driveway / walkway', function () { answers.surface = 'Driveway/walkway'; stepPwCapture(); }),
-			pick('Deck or patio', function () { answers.surface = 'Deck/patio'; stepPwCapture(); }),
-			pick('House / siding', function () { answers.surface = 'House/siding'; stepPwCapture(); }),
-			pick('Fence / retaining wall', function () { answers.surface = 'Fence/retaining wall'; stepPwCapture(); }),
-			pick('Commercial property', function () { answers.surface = 'Commercial'; stepPwCapture(); })
-		]);
-	}
-	function stepPwCapture() {
-		stepMessage('Pressure washing is priced with a <b>free bid</b> — leave your info and we’ll text you one ASAP. 👇', 'I’d like a free pressure washing bid for: ' + answers.surface);
-	}
-
-	function stepMessage(intro, prefill) {
-		botSay(intro, function () {
-			var wrap = el('div', 'ibc-msg bot');
-			wrap.appendChild(buildForm(prefill));
-			body.appendChild(wrap);
-			scrollDown();
-			setChips([]);
+	function startSignup() {
+		userSay('Get Started');
+		askInput({
+			question: 'Awesome! 🎉 To start, what&rsquo;s your first and last name?',
+			placeholder: 'First and last name',
+			autocomplete: 'name',
+			validate: function (v) { return v.length < 2 ? 'Please enter your name so we know who to greet. 😊' : ''; },
+			next: function (v) { lead.name = v; askPhone(); }
 		});
 	}
-
-	function summary() {
-		var parts = [];
-		if (answers.service) parts.push('Service: ' + answers.service);
-		if (answers.plan) parts.push('Plan: ' + planName(answers.plan));
-		if (answers.bins) parts.push('Bins: ' + answers.bins);
-		if (answers.city !== undefined) parts.push('City: ' + (answers.city || '(outside listed areas)'));
-		if (answers.surface) parts.push('Surface: ' + answers.surface);
-		return parts.join(' · ');
-	}
-
-	function buildForm(prefill) {
-		var f = el('form', 'ibc-chat-form');
-		f.innerHTML =
-			'<input type="text" name="name" placeholder="Your name" required>' +
-			'<input type="text" name="contact" placeholder="Phone number (or email)" required>' +
-			'<textarea name="message" placeholder="Anything else we should know?"></textarea>' +
-			'<input type="text" name="ibc_website" style="position:absolute;left:-9999px" tabindex="-1" autocomplete="off" aria-hidden="true">' +
-			'<span class="consent-note">By sending, you agree we may reply by text or email. Msg &amp; data rates may apply. Reply STOP to opt out.</span>' +
-			'<span class="ibc-chat-err" hidden>Please add your name and a way to reach you.</span>' +
-			'<button type="submit" class="btn btn-primary">Send</button>';
-		if (prefill) f.message.value = prefill;
-		f.addEventListener('submit', function (e) {
-			e.preventDefault();
-			var name = f.name.value.trim(), contact = f.contact.value.trim(), msg = f.message.value.trim();
-			var err = f.querySelector('.ibc-chat-err');
-			if (!name || !contact) { err.hidden = false; return; }
-			err.hidden = true;
-			var btn = f.querySelector('button');
-			btn.disabled = true;
-			btn.textContent = 'Sending…';
-			var fullMsg = (summary() ? summary() + '\n\n' : '') + (msg || '(no extra message)');
-			function done() {
-				f.closest('.ibc-msg').remove();
-				if (msg) userSay(msg);
-				botSay('Got it, ' + name.split(' ')[0] + '! 🎉 We’ll text you back shortly — usually within the hour during business hours.', function () {
-					setChips([pick('🔄 Start over', stepStart)]);
-				});
-			}
-			if (!endpoint) { setTimeout(done, 600); return; } /* static preview: demo mode */
-			var data = new FormData();
-			data.append('action', 'ibc_chat');
-			data.append('name', name);
-			data.append('contact', contact);
-			data.append('message', fullMsg);
-			data.append('page', window.location.href);
-			data.append('ibc_website', f.ibc_website.value);
-			fetch(endpoint, { method: 'POST', body: data })
-				.then(function (r) { return r.json(); })
-				.then(function (j) {
-					if (j && j.ok) { done(); }
-					else { err.textContent = 'Something went wrong — please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = 'Send'; }
-				})
-				.catch(function () { done(); }); /* never strand the visitor */
+	function askPhone() {
+		askInput({
+			question: 'Thanks, ' + lead.name.split(' ')[0] + '! What&rsquo;s the best phone number to text you at?',
+			placeholder: 'Phone number',
+			type: 'tel',
+			inputmode: 'tel',
+			autocomplete: 'tel',
+			validate: function (v) { return v.replace(/\D/g, '').length < 10 ? 'That number looks short — please enter a 10-digit phone number.' : ''; },
+			next: function (v) { lead.phone = v; askEmail(); }
 		});
-		return f;
+	}
+	function askEmail() {
+		askInput({
+			question: 'Got it. What&rsquo;s your email address?',
+			placeholder: 'Email address',
+			type: 'email',
+			autocomplete: 'email',
+			validate: function (v) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v) ? '' : 'Hmm, that email doesn&rsquo;t look right — mind double-checking it?'; },
+			next: function (v) { lead.email = v; askZip(); }
+		});
+	}
+	function askZip() {
+		askInput({
+			question: 'Almost done! What&rsquo;s your ZIP code?',
+			placeholder: 'ZIP code',
+			inputmode: 'numeric',
+			autocomplete: 'postal-code',
+			validate: function (v) { return /^\d{5}$/.test(v.trim()) ? '' : 'Please enter a 5-digit ZIP code.'; },
+			next: function (v) { lead.zip = v; askService(); }
+		});
+	}
+	function askService() {
+		botSay('Last question — what service are you interested in?', function () {
+			setChips([
+				{ label: '⭐ Quarterly Clean — $' + P.quart + '/quarter', primary: true, run: function () { chooseService('quart'); } },
+				{ label: 'Monthly Clean — $' + P.month + '/month', run: function () { chooseService('month'); } }
+			]);
+		});
+		setChips([]);
+	}
+	function chooseService(plan) {
+		var label = plan === 'quart' ? 'Quarterly Clean' : 'Monthly Clean';
+		userSay(label);
+		lead.service = label;
+		/* open checkout synchronously so popup blockers allow it */
+		var win = window.open(CHECKOUT[plan], '_blank');
+		submitLead();
+		botSay('Perfect, ' + lead.name.split(' ')[0] + '! 🎉 Taking you to the secure <b>' + label + '</b> signup page now — that&rsquo;s where you&rsquo;ll enter payment info and pick your service address.' + '<br><a class="btn btn-primary" href="' + CHECKOUT[plan] + '" target="_blank" rel="noopener">Open signup page</a>', function () {
+			setChips([{ label: '🔄 Start over', run: function () { lead = {}; greet(); } }]);
+		});
+		if (win) { try { win.opener = null; } catch (e) {} }
+	}
+	function submitLead() {
+		if (!endpoint) return; /* static preview: demo mode */
+		var data = new FormData();
+		data.append('action', 'ibc_chat');
+		data.append('name', lead.name || '');
+		data.append('contact', lead.phone || '');
+		data.append('message', 'CHAT SIGNUP\nEmail: ' + (lead.email || '') + '\nZIP: ' + (lead.zip || '') + '\nService chosen: ' + (lead.service || '') + '\n(Visitor was sent to the ' + (lead.service || '') + ' checkout page — confirm signup in iRoutes.)');
+		data.append('page', window.location.href);
+		data.append('ibc_website', '');
+		fetch(endpoint, { method: 'POST', body: data }).catch(function () {});
 	}
 
+	/* ---------- open/close ---------- */
+	function greet() {
+		botSay('👋 Hi there! Smelly bins? We can fix that. Tap a topic below — or hit <b>Get Started</b> to sign up in under a minute.', function () {
+			setChips(topicChips());
+		});
+	}
 	function start() {
 		if (started) return;
 		started = true;
-		stepStart();
+		greet();
 	}
 	function setOpen(open) {
 		root.classList.toggle('open', open);

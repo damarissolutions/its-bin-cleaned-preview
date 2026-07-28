@@ -402,3 +402,11 @@ textarea{min-height:120px;resize:vertical}
   .ibc-chat{right:14px;bottom:14px}
   .ibc-chat-panel{bottom:74px}
 }
+
+/* chat input row + primary chip */
+.ibc-chip.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+.ibc-chip.primary:hover{background:var(--orange-dark);border-color:var(--orange-dark);color:#fff}
+.ibc-chat-inputrow{display:flex;gap:8px;width:100%}
+.ibc-chat-inputrow input{flex:1;padding:11px 14px;border:1.5px solid var(--line);border-radius:999px;font-family:inherit;font-size:.92rem;background:#fbfdfe}
+.ibc-chat-inputrow input:focus{outline:none;border-color:var(--blue)}
+.ibc-chat-inputrow .btn{padding:0 18px;border-radius:999px;font-size:1rem}
