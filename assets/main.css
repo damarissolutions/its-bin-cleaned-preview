@@ -410,3 +410,9 @@ textarea{min-height:120px;resize:vertical}
 .ibc-chat-inputrow input{flex:1;padding:11px 14px;border:1.5px solid var(--line);border-radius:999px;font-family:inherit;font-size:.92rem;background:#fbfdfe}
 .ibc-chat-inputrow input:focus{outline:none;border-color:var(--blue)}
 .ibc-chat-inputrow .btn{padding:0 18px;border-radius:999px;font-size:1rem}
+
+/* chat teaser bubble */
+.ibc-chat-teaser{position:absolute;right:0;bottom:76px;width:240px;background:#fff;border-radius:16px;border-bottom-right-radius:6px;box-shadow:0 14px 40px rgba(13,43,69,.30);padding:14px 16px;font-size:.88rem;line-height:1.45;color:var(--ink);cursor:pointer;animation:ibcPop .25s ease}
+.ibc-chat-teaser b{color:var(--navy)}
+.ibc-teaser-x{position:absolute;top:4px;right:8px;background:none;border:0;color:var(--muted);font-size:1.15rem;cursor:pointer;padding:2px}
+.ibc-teaser-x:hover{color:var(--ink)}

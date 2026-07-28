@@ -94,7 +94,7 @@
 	function close() {
 		modal.hidden = true;
 		document.body.style.overflow = '';
-		try { localStorage.setItem(KEY, '1'); } catch (e) {}
+		try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {}
 	}
 	modal.addEventListener('click', function (e) {
 		if (e.target.hasAttribute && e.target.hasAttribute('data-close')) close();
@@ -105,7 +105,11 @@
 		if (btn) { e.preventDefault(); open(); }
 	});
 	var seen = false;
-	try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
+	try {
+		var sv = localStorage.getItem(KEY);
+		if (sv === 'done') { seen = true; } /* legacy '1' values are ignored so the popup returns */
+		else if (sv && Date.now() - parseInt(sv, 10) < 86400000) { seen = true; }
+	} catch (e) {}
 	if (!seen) setTimeout(open, 2600);
 
 	var form = modal.querySelector('.ibc-offer-form');
@@ -118,7 +122,7 @@
 		function reveal() {
 			modal.querySelector('[data-step=form]').hidden = true;
 			modal.querySelector('[data-step=done]').hidden = false;
-			try { localStorage.setItem(KEY, '1'); } catch (e) {}
+				try { localStorage.setItem(KEY, 'done'); } catch (e) {}
 		}
 		var endpoint = modal.getAttribute('data-endpoint');
 		if (!endpoint) { reveal(); return; } /* static preview: demo mode */
@@ -376,12 +380,30 @@
 		} catch (e) {}
 	}
 
+	function showTeaser() {
+		if (root.querySelector('.ibc-chat-teaser')) return;
+		var t = el('div', 'ibc-chat-teaser');
+		t.innerHTML = '<button class="ibc-teaser-x" aria-label="Dismiss">&times;</button>\ud83d\udc4b <b>Need help?</b><br>Get a quote &amp; sign up in under a minute \u2014 chat with us!';
+		t.addEventListener('click', function (e) {
+			if (e.target.classList.contains('ibc-teaser-x')) { t.remove(); return; }
+			t.remove();
+			setOpen(true);
+		});
+		root.insertBefore(t, bubble);
+	}
+	function clearTeaser() {
+		var t = root.querySelector('.ibc-chat-teaser');
+		if (t) t.remove();
+	}
+	bubble.addEventListener('click', clearTeaser);
+
 	var nudged = false;
 	try { nudged = sessionStorage.getItem('ibc_chat_nudged') === '1'; } catch (e) {}
 	if (!nudged) {
 		setTimeout(function () {
 			if (panel.hidden) {
 				root.classList.add('nudge');
+				showTeaser();
 				playDing();
 			}
 			try { sessionStorage.setItem('ibc_chat_nudged', '1'); } catch (e) {}
