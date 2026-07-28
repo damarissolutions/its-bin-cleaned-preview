@@ -26,18 +26,19 @@
     </a>
     <nav class="main-nav" id="mainNav">
       <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="#">About</a></li>
+        <li><a href="#">About</a>
+          <ul>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+        </li>
         <li><a href="#">Services</a>
           <ul>
             <li><a href="#">Bin Cleaning</a></li>
             <li><a href="#">Pressure Washing</a></li>
           </ul>
         </li>
-        <li><a href="#">How It Works</a></li>
-        <li><a href="#">FAQ</a></li>
+        <li><a href="#how">How It Works</a></li>
         <li><a href="#">Blog</a></li>
-        <li><a href="#">Contact</a></li>
       </ul>
     </nav>
     <div class="header-cta">
@@ -106,7 +107,7 @@
       <h2>To get started, choose a service</h2>
       <p class="price-note">Prices include 2 bins. $10 for each additional bin cleaned.</p>
     </div>
-    <div class="grid grid-3 price-grid">
+    <div class="grid grid-2 price-grid price-grid-2">
       <div class="price-card">
         <h3>Monthly Clean</h3>
         <p class="freq">Clean bins every 4 weeks</p>
@@ -134,19 +135,6 @@
         <button type="button" class="offer-link js-open-offer">&#127881; Unlock the $45/quarter code</button>
         <a class="btn btn-primary" href="https://itsbincleanedor.iserviceroutes.com/checkout.html?prId=AEEMMD9C8D7D50AEBC8DDB5373598B0B365D0BDE9B2D2D3ED769F300CF2C013D10E8C121" target="_blank" rel="noopener">Book Online</a>
       </div>
-      <div class="price-card">
-        <h3>On-Demand Clean</h3>
-        <p class="freq">Try us out &mdash; a one-time deep clean</p>
-        <div class="offer-flag">Limited-Time Offer</div>
-        <div class="price-amount"><span class="price-compare">$75</span><sup>$</sup>65</div>
-        <p class="price-per">One visit &middot; no commitment</p>
-        <ul class="price-includes">
-          <li><strong>2 bins included</strong></li>
-          <li>$10 each additional bin</li>
-          <li>The perfect trial run before a quarterly plan</li>
-        </ul>
-        <a class="btn btn-blue" href="https://itsbincleanedor.iserviceroutes.com/checkout.html?prId=4XCGRHYX834A9719129636C5050FEE18B9396EC441D2B0BB9F63B7D4C4D0AAD18CBDCF39" target="_blank" rel="noopener">Book Online</a>
-      </div>
     </div>
   </div>
 </section>
@@ -172,8 +160,30 @@
   </div>
 </section>
 
-<!-- PRESSURE WASHING -->
+
+<!-- ON-DEMAND / TRIAL -->
 <section class="section band">
+  <div class="wrap split rev">
+    <div class="split-media">
+      <img src="assets/sign.jpg" alt="It's Bin Cleaned cleaning in progress sign">
+      <span class="media-tag">One visit &middot; no commitment</span>
+    </div>
+    <div>
+      <span class="kicker" style="color:#8fd4f2">Try Us Out</span>
+      <h2>Not ready for a plan? Go on-demand.</h2>
+      <p class="lead">Book a one-time deep clean &mdash; we sanitize and deodorize your bins with 200&deg; pressurized hot water, no subscription required. It&rsquo;s the perfect trial run before a quarterly plan.</p>
+      <div class="ondemand-inline">
+        <div class="offer-flag">Limited-Time Offer</div>
+        <div class="price-amount" style="color:#fff"><span class="price-compare">$75</span><sup>$</sup><span style="color:#fff">65</span></div>
+        <p class="price-per" style="color:#9cc4dd">2 bins included &middot; $10 each additional bin</p>
+      </div>
+      <a class="btn btn-primary btn-lg" href="https://itsbincleanedor.iserviceroutes.com/checkout.html?prId=4XCGRHYX834A9719129636C5050FEE18B9396EC441D2B0BB9F63B7D4C4D0AAD18CBDCF39" target="_blank" rel="noopener">Book a One-Time Clean</a>
+    </div>
+  </div>
+</section>
+
+<!-- PRESSURE WASHING -->
+<section class="section">
   <div class="wrap split rev">
     <div class="split-media">
       <div class="ba-grid">
@@ -182,7 +192,7 @@
       </div>
     </div>
     <div>
-      <span class="kicker" style="color:#8fd4f2">More Than Bins</span>
+      <span class="kicker">More Than Bins</span>
       <h2>We do pressure washing!</h2>
       <p class="lead">At It’s Bin Cleaned, we don’t just stop at spotless bins! We also offer professional pressure washing services. Our eco-friendly practices ensure your property gets a thorough clean without harming the environment. We can power wash everything from driveways and decks to fences and building exteriors.</p>
       <p class="lead" style="margin-top:12px">It’s just one more way we help you maintain a cleaner, healthier, and more inviting property.</p>

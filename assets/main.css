@@ -338,3 +338,22 @@ textarea{min-height:120px;resize:vertical}
 .ibc-offer-err{color:#c0392b;font-weight:600;font-size:.9rem}
 .ibc-offer-code{font-family:var(--font-display);font-weight:800;font-size:2.6rem;letter-spacing:.08em;color:var(--navy);background:var(--sky);border:2px dashed var(--blue);border-radius:14px;padding:14px 20px;margin:6px 0 16px}
 @media(max-width:560px){.ibc-modal-card{padding:36px 22px 28px}}
+
+/* ---------- standalone On-Demand / trial section ---------- */
+.price-grid-2{max-width:820px;margin:0 auto}
+.ondemand-inline{margin:22px 0 26px}
+.ondemand-inline .price-amount{font-size:3.6rem}
+.ondemand-panel{display:grid;grid-template-columns:1.2fr .8fr;gap:44px;align-items:center;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:22px;padding:44px 48px}
+.ondemand-panel h2{color:#fff;margin:12px 0 10px}
+.ondemand-panel p{color:#c9e2f2;font-size:1.02rem}
+.ondemand-points{margin-top:16px;display:grid;gap:8px}
+.ondemand-points li{color:#dff0fa;font-size:.95rem;font-weight:600;display:flex;gap:10px;align-items:center}
+.ondemand-points li::before{content:"\2713";color:var(--green);font-weight:800}
+.ondemand-price{text-align:center;background:#fff;border-radius:18px;padding:34px 28px;box-shadow:var(--shadow-lg)}
+.ondemand-price .price-amount{font-size:4rem}
+.ondemand-price .price-per{margin-bottom:18px}
+@media(max-width:860px){
+  .ondemand-panel{grid-template-columns:1fr;padding:30px 24px;text-align:center}
+  .ondemand-points li{justify-content:center}
+  .price-grid-2{grid-template-columns:1fr;max-width:440px}
+}
