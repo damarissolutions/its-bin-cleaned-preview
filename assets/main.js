@@ -339,11 +339,51 @@
 	root.querySelector('.ibc-chat-x').addEventListener('click', function () { setOpen(false); });
 	document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) setOpen(false); });
 
+	/* Soft two-note chime (Web Audio — no sound file). Browsers only allow
+	   audio after the visitor's first tap/click/keypress, so if the nudge
+	   fires before any interaction we play at their first gesture instead. */
+	function playDing() {
+		try {
+			var Ctx = window.AudioContext || window.webkitAudioContext;
+			if (!Ctx) return;
+			var ctx = new Ctx();
+			var play = function () {
+				[[830, 0], [1245, 0.14]].forEach(function (n) {
+					var o = ctx.createOscillator();
+					var g = ctx.createGain();
+					o.type = 'sine';
+					o.frequency.value = n[0];
+					var t = ctx.currentTime + n[1];
+					g.gain.setValueAtTime(0, t);
+					g.gain.linearRampToValueAtTime(0.08, t + 0.02);
+					g.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+					o.connect(g).connect(ctx.destination);
+					o.start(t);
+					o.stop(t + 0.6);
+				});
+				setTimeout(function () { ctx.close(); }, 1200);
+			};
+			if (ctx.state === 'suspended') {
+				var unlock = function () {
+					['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { document.removeEventListener(ev, unlock); });
+					if (!panel.hidden) { ctx.close(); return; } /* already chatting — skip */
+					ctx.resume().then(play).catch(function () {});
+				};
+				['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { document.addEventListener(ev, unlock, { once: false }); });
+			} else {
+				play();
+			}
+		} catch (e) {}
+	}
+
 	var nudged = false;
 	try { nudged = sessionStorage.getItem('ibc_chat_nudged') === '1'; } catch (e) {}
 	if (!nudged) {
 		setTimeout(function () {
-			if (panel.hidden) root.classList.add('nudge');
+			if (panel.hidden) {
+				root.classList.add('nudge');
+				playDing();
+			}
 			try { sessionStorage.setItem('ibc_chat_nudged', '1'); } catch (e) {}
 		}, 6000);
 	}
