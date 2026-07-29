@@ -128,7 +128,7 @@ h3{font-size:1.45rem;letter-spacing:.02em}
 .price-card h3{font-size:1.7rem}
 .price-card .freq{color:var(--muted);font-weight:600;font-size:.95rem;margin:4px 0 18px}
 .price-amount{font-family:var(--font-display);font-weight:800;color:var(--navy);font-size:4.2rem;line-height:1}
-.price-amount sup{font-size:1.8rem;top:-1.6rem;position:relative;color:var(--blue-dark)}
+.price-amount sup{font-size:1.8rem;top:-0.55rem;position:relative;vertical-align:baseline;color:var(--blue-dark)}
 .price-per{color:var(--muted);font-weight:600;margin-bottom:20px}
 .price-includes{border-top:1px solid var(--line);margin-top:6px;padding-top:20px;margin-bottom:26px;color:var(--muted);font-size:.95rem}
 .price-includes li{padding:4px 0}
