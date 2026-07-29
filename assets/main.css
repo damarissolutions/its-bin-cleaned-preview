@@ -430,3 +430,8 @@ textarea{min-height:120px;resize:vertical}
 .ba-cap{position:absolute;top:14px;background:var(--navy);color:#fff;font-weight:700;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px;border-radius:999px;pointer-events:none}
 .ba-cap.before{left:14px}
 .ba-cap.after{right:14px;background:var(--green)}
+
+/* landing objection panel */
+.lp-objection{max-width:720px;margin:0 auto;background:rgba(240,124,34,.10);border:1px solid rgba(240,124,34,.40);border-radius:18px;padding:30px 34px;text-align:center}
+.lp-objection-q{font-family:var(--font-display);font-weight:800;text-transform:uppercase;font-size:1.5rem;color:var(--orange);margin-bottom:10px}
+.lp-objection p{color:#dcecf7;font-size:1rem;line-height:1.6}
