@@ -180,7 +180,33 @@
     </div>
   </section>
 
-  <script src="assets/main.js"></script>
+  
+<!-- CORNER CHAT WIDGET (demo mode in preview) -->
+<div class="ibc-chat" id="ibcChat"
+  data-endpoint=""
+  data-areas="Salem, Keizer, Turner, Aumsville, Sublimity, Stayton, Jefferson, Millersburg, Albany, Woodburn"
+  data-price-month="30" data-price-quart="45" data-price-once="65"
+  data-regular-quart="60" data-regular-once="75"
+  data-checkout-month="https://itsbincleanedor.iserviceroutes.com/checkout.html?prId=T6NJ2P6HB8DCC8E6B18ADA303736C33E60BF7E45E9E74D48C61215522068F731F6551E4F"
+  data-checkout-quart="https://itsbincleanedor.iserviceroutes.com/checkout.html?prId=AEEMMD9C8D7D50AEBC8DDB5373598B0B365D0BDE9B2D2D3ED769F300CF2C013D10E8C121"
+  data-checkout-once="https://itsbincleanedor.iserviceroutes.com/checkout.html?prId=4XCGRHYX834A9719129636C5050FEE18B9396EC441D2B0BB9F63B7D4C4D0AAD18CBDCF39"
+  data-pw-url="" data-how-url="">
+  <button class="ibc-chat-bubble" id="ibcChatBubble" aria-label="Chat with us" aria-expanded="false">
+    <svg class="ic-chat" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.9 2 11.7c0 2.2 1 4.3 2.6 5.8-.2 1.5-.8 2.9-1.7 4 1.9-.2 3.7-.9 5.2-2 1.2.4 2.5.6 3.9.6 5.5 0 10-3.9 10-8.7S17.5 3 12 3z"/></svg>
+    <svg class="ic-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.3 5.7 12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7l1.4-1.4 6.3 6.3 6.3-6.3z"/></svg>
+    <span class="ibc-chat-dot"></span>
+  </button>
+  <div class="ibc-chat-panel" hidden>
+    <div class="ibc-chat-head">
+      <img src="assets/logo.png" alt="">
+      <div><strong>It&rsquo;s Bin Cleaned</strong><span>We usually reply by text within the hour</span></div>
+      <button class="ibc-chat-x" aria-label="Close chat">&times;</button>
+    </div>
+    <div class="ibc-chat-body"></div>
+    <div class="ibc-chat-chips"></div>
+  </div>
+</div>
+
   <footer class="lp-footer wrap">
     <span>© 2026 It’s Bin Cleaned, LLC · <a href="https://itsbincleanedor.com/privacy-policy/">Privacy Policy</a></span>
   </footer>
@@ -213,34 +239,7 @@
     </div>
   </div>
 </div>
-<script>
-(function () {
-  var modal = document.getElementById('ibcOfferModal');
-  if (!modal) return;
-  var KEY = 'ibc_offer_seen_preview';
-  function open() { modal.hidden = false; document.body.style.overflow = 'hidden'; }
-  function close() { modal.hidden = true; document.body.style.overflow = ''; try { localStorage.setItem(KEY, '1'); } catch (e) {} }
-  modal.addEventListener('click', function (e) { if (e.target.hasAttribute && e.target.hasAttribute('data-close')) close(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
-  document.addEventListener('click', function (e) {
-    var btn = e.target.closest && e.target.closest('.js-open-offer');
-    if (btn) { e.preventDefault(); open(); }
-  });
-  var seen = false;
-  try { seen = localStorage.getItem(KEY) === '1'; } catch (e) {}
-  if (!seen) setTimeout(open, 2600);
-  modal.querySelector('.ibc-offer-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var email = modal.querySelector('input[type=email]').value.trim();
-    var err = modal.querySelector('.ibc-offer-err');
-    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.hidden = false; return; }
-    err.hidden = true;
-    modal.querySelector('[data-step=form]').hidden = true;
-    modal.querySelector('[data-step=done]').hidden = false;
-    try { localStorage.setItem(KEY, '1'); } catch (e) {}
-  });
-})();
-</script>
 
+<script src="assets/main.js"></script>
 </body>
 </html>
