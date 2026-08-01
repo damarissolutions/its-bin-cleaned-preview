@@ -25,7 +25,9 @@
       <span class="brand-name">It’s Bin Cleaned<span>Salem, Oregon</span></span>
     </a>
     <nav class="main-nav" id="mainNav">
+      <button class="nav-close" aria-label="Close menu">&times;</button>
       <ul>
+        <li class="nav-home-mobile"><a href="index.html">Home</a></li>
         <li><a href="#">About</a>
           <ul>
             <li><a href="#faq">FAQ</a></li>
@@ -371,6 +373,12 @@
 <script>
 document.getElementById('navToggle').addEventListener('click',function(){
   document.getElementById('mainNav').classList.toggle('open');
+});
+document.querySelector('#mainNav .nav-close').addEventListener('click',function(){
+  document.getElementById('mainNav').classList.remove('open');
+});
+document.getElementById('mainNav').addEventListener('click',function(e){
+  if(e.target.tagName==='A'){document.getElementById('mainNav').classList.remove('open');}
 });
 </script>
 

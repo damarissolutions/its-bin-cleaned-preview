@@ -83,6 +83,13 @@
 			}
 		});
 	}
+	var navClose = nav ? nav.querySelector('.nav-close') : null;
+	if (navClose && toggle) {
+		navClose.addEventListener('click', function () {
+			nav.classList.remove('open');
+			toggle.setAttribute('aria-expanded', 'false');
+		});
+	}
 })();
 
 /* Limited-time quarterly offer popup */

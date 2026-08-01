@@ -83,6 +83,8 @@ h3{font-size:1.45rem;letter-spacing:.02em}
 .header-cta .btn{padding:12px 24px;font-size:.93rem}
 .nav-toggle{display:none;background:none;border:0;cursor:pointer;padding:8px}
 .nav-toggle span{display:block;width:26px;height:3px;border-radius:2px;background:var(--navy);margin:5px 0;transition:.2s}
+.nav-close{display:none}
+.nav-home-mobile{display:none}
 
 /* ---------- hero ---------- */
 .hero{position:relative;background:linear-gradient(160deg,var(--navy) 0%,var(--navy-2) 55%,var(--blue-dark) 130%);color:#fff;overflow:hidden}
@@ -304,6 +306,9 @@ textarea{min-height:120px;resize:vertical}
   .main-nav li ul{position:static;opacity:1;visibility:visible;transform:none;background:transparent;border:0;box-shadow:none}
   .main-nav li ul a{font-size:1rem;color:#9cc4dd}
   .nav-toggle{display:block;z-index:95;position:relative}
+  .nav-close{display:block;position:absolute;top:16px;right:18px;background:none;border:0;color:#fff;font-size:2.6rem;line-height:1;cursor:pointer;padding:8px;z-index:96}
+  .nav-close:hover{color:#8fd4f2}
+  .nav-home-mobile{display:block}
   .header-cta .btn-outline{display:none}
   .topbar .tb-areas{display:none}
   .lp-steps{grid-template-columns:1fr}
