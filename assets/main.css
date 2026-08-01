@@ -292,6 +292,11 @@ textarea{min-height:120px;resize:vertical}
   .grid-3,.post-grid{grid-template-columns:1fr}
   .price-grid{grid-template-columns:1fr;max-width:440px;margin:0 auto}
   .price-card.popular{order:-1}
+  /* backdrop-filter on the sticky header creates a containing block that clips
+     the fixed-position menu overlay on iOS — use a solid header on mobile */
+  .site-header{background:#fff;backdrop-filter:none}
+  .btn{white-space:normal}
+  .form-grid > div{min-width:0}
   .main-nav{position:fixed;inset:0;top:0;background:rgba(13,43,69,.98);flex-direction:column;justify-content:center;opacity:0;visibility:hidden;transition:.25s;z-index:90}
   .main-nav.open{opacity:1;visibility:visible}
   .main-nav>ul{flex-direction:column;text-align:center;gap:8px}
