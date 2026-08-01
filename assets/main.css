@@ -306,7 +306,7 @@ textarea{min-height:120px;resize:vertical}
   .main-nav li ul{position:static;opacity:1;visibility:visible;transform:none;background:transparent;border:0;box-shadow:none}
   .main-nav li ul a{font-size:1rem;color:#9cc4dd}
   .nav-toggle{display:block;z-index:95;position:relative}
-  .nav-close{display:block;position:absolute;top:16px;right:18px;background:none;border:0;color:#fff;font-size:2.6rem;line-height:1;cursor:pointer;padding:8px;z-index:96}
+  .nav-close{display:flex;align-items:center;justify-content:center;position:absolute;top:16px;left:16px;width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.65);color:#fff;font-size:2.3rem;line-height:1;cursor:pointer;padding:0;z-index:96;box-shadow:0 4px 16px rgba(0,0,0,.3)}
   .nav-close:hover{color:#8fd4f2}
   .nav-home-mobile{display:block}
   .header-cta .btn-outline{display:none}
