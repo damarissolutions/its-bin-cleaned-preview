@@ -343,6 +343,9 @@ textarea{min-height:120px;resize:vertical}
 .ibc-modal-card p{color:var(--muted);font-size:.98rem;margin-bottom:18px}
 .ibc-offer-form{display:flex;flex-direction:column;gap:12px;margin-bottom:6px}
 .ibc-offer-form input[type=email]{width:100%;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:1rem;background:#fbfdfe;text-align:center}
+.ibc-offer-names{display:flex;gap:10px}
+.ibc-offer-names input{flex:1;min-width:0;padding:14px 16px;border:1.5px solid var(--line);border-radius:12px;font-family:inherit;font-size:1rem;background:#fbfdfe;text-align:center}
+.ibc-offer-names input:focus{outline:none;border-color:var(--blue)}
 .ibc-offer-form input[type=email]:focus{outline:none;border-color:var(--blue)}
 .ibc-hp{position:absolute;left:-9999px}
 .ibc-modal-fine{font-size:.76rem;color:var(--muted);margin-top:8px;margin-bottom:0}

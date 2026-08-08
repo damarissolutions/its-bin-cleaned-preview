@@ -123,8 +123,12 @@
 	form.addEventListener('submit', function (e) {
 		e.preventDefault();
 		var email = form.querySelector('input[type=email]').value.trim();
+		var firstEl = form.querySelector('[name=first_name]');
+		var lastEl = form.querySelector('[name=last_name]');
+		var first = firstEl ? firstEl.value.trim() : '';
+		var last = lastEl ? lastEl.value.trim() : '';
 		var err = modal.querySelector('.ibc-offer-err');
-		if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.hidden = false; return; }
+		if ((firstEl && (!first || !last)) || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.hidden = false; return; }
 		err.hidden = true;
 		function reveal() {
 			modal.querySelector('[data-step=form]').hidden = true;
@@ -135,12 +139,14 @@
 		if (!endpoint) { reveal(); return; } /* static preview: demo mode */
 		var data = new FormData();
 		data.append('action', 'ibc_offer');
+		data.append('first_name', first);
+		data.append('last_name', last);
 		data.append('email', email);
 		data.append('page', window.location.href);
 		data.append('ibc_website', form.querySelector('[name=ibc_website]') ? form.querySelector('[name=ibc_website]').value : '');
 		fetch(endpoint, { method: 'POST', body: data })
 			.then(function (r) { return r.json(); })
-			.then(function (j) { if (j && j.ok) { reveal(); } else { err.textContent = 'Please enter a valid email address.'; err.hidden = false; } })
+			.then(function (j) { if (j && j.ok) { reveal(); } else { err.textContent = 'Please enter your first and last name and a valid email address.'; err.hidden = false; } })
 			.catch(function () { reveal(); }); /* never strand the visitor: show the code even if the save failed */
 	});
 })();

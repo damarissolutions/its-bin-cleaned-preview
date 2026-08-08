@@ -237,14 +237,18 @@
     <div class="ibc-modal-step" data-step="form">
       <div class="ibc-modal-flag">&#127881; Limited-Time Offer</div>
       <h3 id="ibcOfferTitle">Quarterly cleans: <s>$60</s> <em>$45</em>/quarter</h3>
-      <p>Enter your email to unlock our limited-time <b>$45 per quarterly clean</b> rate (normally $60). Your offer code appears instantly.</p>
+      <p>Enter your name and email to unlock our limited-time <b>$45 per quarterly clean</b> rate (normally $60). Your offer code appears instantly.</p>
       <form class="ibc-offer-form" novalidate>
         <p class="ibc-hp" aria-hidden="true"><input type="text" name="ibc_website" tabindex="-1" autocomplete="off"></p>
-        <input type="email" name="email" required placeholder="you@email.com" aria-label="Email address">
+        <div class="ibc-offer-names">
+            <input type="text" name="first_name" required placeholder="First name" aria-label="First name">
+            <input type="text" name="last_name" required placeholder="Last name" aria-label="Last name">
+          </div>
+          <input type="email" name="email" required placeholder="you@email.com" aria-label="Email address">
         <button type="submit" class="btn btn-primary">Unlock My $45 Rate</button>
       </form>
       <p class="ibc-modal-fine">Prices include 2 bins. $10 for each additional bin. No spam &mdash; just your code and service reminders.</p>
-      <p class="ibc-offer-err" hidden>Please enter a valid email address.</p>
+      <p class="ibc-offer-err" hidden>Please enter your first and last name and a valid email address.</p>
     </div>
     <div class="ibc-modal-step" data-step="done" hidden>
       <div class="ibc-modal-flag ok">&#10003; Offer Unlocked</div>
