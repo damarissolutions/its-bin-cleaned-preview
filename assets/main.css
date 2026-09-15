@@ -266,6 +266,16 @@ textarea{min-height:120px;resize:vertical}
 .lp-page{background:linear-gradient(165deg,var(--navy) 0%,var(--navy-2) 60%,var(--blue-dark) 140%);color:#fff;min-height:100vh}
 .lp-header{padding:20px 0;display:flex;justify-content:center}
 .lp-header img{height:92px}
+.lp-video{padding:6px 20px 0}
+/* Source video is portrait 1080x1920 with letterbox bars baked in; the real
+   footage is the center 1080x540 band, so a 2:1 frame + object-fit:cover
+   shows it edge-to-edge with no black. */
+.lp-video-frame{position:relative;max-width:920px;margin:0 auto;aspect-ratio:2/1;overflow:hidden;border-radius:18px;background:#000;box-shadow:0 18px 44px rgba(0,0,0,.45);cursor:pointer}
+.lp-video-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+.lp-video-sound{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);border:0;cursor:pointer;background:var(--orange);color:#fff;font-weight:800;font-family:inherit;font-size:1rem;padding:12px 22px;border-radius:999px;box-shadow:0 8px 22px rgba(0,0,0,.4);animation:ibcPulse 2s ease-in-out infinite}
+.lp-video-sound:hover{filter:brightness(1.08)}
+@keyframes ibcPulse{0%,100%{transform:translateX(-50%) scale(1)}50%{transform:translateX(-50%) scale(1.06)}}
+@media (max-width:640px){.lp-video{padding:2px 12px 0}.lp-video-frame{border-radius:12px}.lp-video-sound{font-size:.9rem;padding:10px 18px;bottom:10px}}
 .lp-hero{text-align:center;padding:26px 0 10px}
 .lp-hero h1{color:#fff;font-size:clamp(2.4rem,6vw,4rem);max-width:820px;margin:0 auto 16px}
 .lp-hero h1 em{font-style:normal;color:var(--orange)}

@@ -92,6 +92,37 @@
 	}
 })();
 
+/* Landing-page intro video: browsers block unmuted autoplay until the visitor
+   interacts with the page, so we try with sound first and fall back to muted
+   autoplay + a "Tap for sound" button (which restarts the pitch from 0:00). */
+(function () {
+	var v = document.getElementById('ibcLpVideo');
+	if (!v) return;
+	var btn = document.getElementById('ibcLpVideoSound');
+	function soundOn() {
+		v.currentTime = 0;
+		v.muted = false;
+		v.play();
+		if (btn) btn.hidden = true;
+	}
+	function tryUnmuted() {
+		v.muted = false;
+		var p = v.play();
+		if (p && p.catch) {
+			p.catch(function () {
+				v.muted = true;
+				v.play();
+				if (btn) btn.hidden = false;
+			});
+		}
+	}
+	if (btn) btn.addEventListener('click', soundOn);
+	v.addEventListener('click', function () {
+		if (v.muted) { soundOn(); } else { v.muted = true; if (btn) btn.hidden = false; }
+	});
+	if (v.readyState >= 2) { tryUnmuted(); } else { v.addEventListener('loadeddata', tryUnmuted, { once: true }); }
+})();
+
 /* Limited-time quarterly offer popup */
 (function () {
 	var modal = document.getElementById('ibcOfferModal');
