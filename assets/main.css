@@ -231,6 +231,9 @@ textarea{min-height:120px;resize:vertical}
 .site-footer a:hover{color:#fff}
 .site-footer li{padding:4px 0}
 .footer-brand img{height:84px;margin-bottom:16px}
+.footer-bbb{display:inline-block;margin-top:18px}
+.footer-bbb img{height:52px;width:auto;margin:0;opacity:.92;transition:opacity .2s}
+.footer-bbb:hover img{opacity:1}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.12);padding:20px 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:.85rem;color:#7fa5c1}
 .footer-bottom a{color:#9cc4dd}
 
