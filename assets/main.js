@@ -128,6 +128,9 @@
 	var modal = document.getElementById('ibcOfferModal');
 	if (!modal) return;
 	var KEY = 'ibc_offer_seen';
+	/* which offer the visitor is claiming: quarterly-card unlock links set
+	   'quarterly'; the auto-open and everything else is the On-Demand trial */
+	var context = 'ondemand';
 	function open() { modal.hidden = false; document.body.style.overflow = 'hidden'; }
 	function close() {
 		modal.hidden = true;
@@ -140,7 +143,7 @@
 	document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
 	document.addEventListener('click', function (e) {
 		var btn = e.target.closest && e.target.closest('.js-open-offer');
-		if (btn) { e.preventDefault(); open(); }
+		if (btn) { e.preventDefault(); context = 'quarterly'; open(); }
 	});
 	var seen = false;
 	try {
@@ -162,6 +165,18 @@
 		if ((firstEl && (!first || !last)) || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { err.hidden = false; return; }
 		err.hidden = true;
 		function reveal() {
+			if (context === 'quarterly') {
+				var doneBtn = modal.querySelector('[data-step=done] .btn');
+				var quartUrl = modal.getAttribute('data-checkout-quart');
+				if (doneBtn && quartUrl) {
+					doneBtn.href = quartUrl;
+					doneBtn.textContent = 'Start My Quarterly Plan';
+				}
+				var doneCopy = modal.querySelector('[data-step=done] p');
+				if (doneCopy) {
+					doneCopy.innerHTML = 'Use this code when you subscribe to the <b>Quarterly Clean</b> to lock in the $' + (modal.getAttribute('data-price-quart') || '45') + '/quarter rate.';
+				}
+			}
 			modal.querySelector('[data-step=form]').hidden = true;
 			modal.querySelector('[data-step=done]').hidden = false;
 				try { localStorage.setItem(KEY, 'done'); } catch (e) {}
@@ -174,6 +189,7 @@
 		data.append('last_name', last);
 		data.append('email', email);
 		data.append('page', window.location.href);
+		data.append('context', context);
 		data.append('ibc_website', form.querySelector('[name=ibc_website]') ? form.querySelector('[name=ibc_website]').value : '');
 		fetch(endpoint, { method: 'POST', body: data })
 			.then(function (r) { return r.json(); })
