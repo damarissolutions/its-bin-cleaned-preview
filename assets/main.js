@@ -200,7 +200,7 @@
 		regQuart: parseInt(d('regular-quart'), 10) || 60,
 		regOnce: parseInt(d('regular-once'), 10) || 75
 	};
-	var CHECKOUT = { month: d('checkout-month'), quart: d('checkout-quart') };
+	var CHECKOUT = { month: d('checkout-month'), quart: d('checkout-quart'), once: d('checkout-once') };
 	var howUrl = d('how-url');
 	var lead = {};
 	var started = false;
@@ -333,13 +333,14 @@
 		botSay('Last question — what service are you interested in?', function () {
 			setChips([
 				{ label: '⭐ Quarterly Clean — $' + P.quart + '/quarter', primary: true, run: function () { chooseService('quart'); } },
-				{ label: 'Monthly Clean — $' + P.month + '/month', run: function () { chooseService('month'); } }
+				{ label: 'Monthly Clean — $' + P.month + '/month', run: function () { chooseService('month'); } },
+				{ label: '🧽 On-Demand Clean — $' + P.once + ' one-time', run: function () { chooseService('once'); } }
 			]);
 		});
 		setChips([]);
 	}
 	function chooseService(plan) {
-		var label = plan === 'quart' ? 'Quarterly Clean' : 'Monthly Clean';
+		var label = plan === 'quart' ? 'Quarterly Clean' : plan === 'once' ? 'On-Demand Clean (one-time)' : 'Monthly Clean';
 		userSay(label);
 		lead.service = label;
 		/* open checkout synchronously so popup blockers allow it */
