@@ -298,6 +298,8 @@ textarea{min-height:120px;resize:vertical}
 .lp-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:14px}
 .lp-section{padding:92px 0}
 .lp .price-card,.lp-page .price-card{border-width:0}
+/* The landing page has no offer popup, so hide the unlock-code opener there. */
+.lp .offer-link,.lp-page .offer-link{display:none}
 .lp-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;text-align:center}
 .lp-step{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:28px 22px}
 .lp-step .step-num{color:var(--orange)}
