@@ -92,6 +92,37 @@
 	}
 })();
 
+/* GA4 helper: no-op on static previews / if Analytics is blocked. */
+function ibcTrack(name, params) {
+	try {
+		if (typeof gtag === 'function') { gtag('event', name, params || {}); }
+	} catch (e) {}
+}
+
+/* GA4: every click out to an iServiceRoutes checkout/portal link becomes a
+   select_plan event (the key event in GA) — the only conversion signal we
+   have until cross-domain tracking covers the checkout itself. */
+(function () {
+	document.addEventListener('click', function (e) {
+		var a = e.target.closest && e.target.closest('a[href*="iserviceroutes.com"]');
+		if (!a) return;
+		var href = a.href || '';
+		var plan = 'Checkout';
+		if (href.indexOf('TryUsOut') > -1) { plan = 'On-Demand'; }
+		else if (href.indexOf('GetConsole') > -1) { plan = 'Customer Login'; }
+		else {
+			var chat = document.getElementById('ibcChat');
+			if (chat) {
+				if (chat.getAttribute('data-checkout-month') && href.indexOf(chat.getAttribute('data-checkout-month')) === 0) { plan = 'Monthly'; }
+				if (chat.getAttribute('data-checkout-quart') && href.indexOf(chat.getAttribute('data-checkout-quart')) === 0) { plan = 'Quarterly'; }
+			}
+		}
+		if (plan !== 'Customer Login') {
+			ibcTrack('select_plan', { plan_name: plan, link_url: href.split('?')[0] });
+		}
+	}, true);
+})();
+
 /* Landing-page intro video: browsers block unmuted autoplay until the visitor
    interacts with the page, so we try with sound first and fall back to muted
    autoplay + a "Tap for sound" button (which restarts the pitch from 0:00). */
@@ -104,6 +135,7 @@
 		v.muted = false;
 		v.play();
 		if (btn) btn.hidden = true;
+		ibcTrack('video_sound_on', {});
 	}
 	function tryUnmuted() {
 		v.muted = false;
@@ -180,6 +212,7 @@
 			modal.querySelector('[data-step=form]').hidden = true;
 			modal.querySelector('[data-step=done]').hidden = false;
 				try { localStorage.setItem(KEY, 'done'); } catch (e) {}
+			ibcTrack('offer_unlock', { offer: context });
 		}
 		var endpoint = modal.getAttribute('data-endpoint');
 		if (!endpoint) { reveal(); return; } /* static preview: demo mode */
@@ -361,6 +394,7 @@
 		lead.service = label;
 		/* open checkout synchronously so popup blockers allow it */
 		var win = window.open(CHECKOUT[plan], '_blank');
+		ibcTrack('chat_signup', { plan_name: label });
 		submitLead();
 		botSay('Perfect, ' + lead.name.split(' ')[0] + '! 🎉 Taking you to the secure <b>' + label + '</b> signup page now — that&rsquo;s where you&rsquo;ll enter payment info and pick your service address.' + '<br><a class="btn btn-primary" href="' + CHECKOUT[plan] + '" target="_blank" rel="noopener">Open signup page</a>', function () {
 			setChips([{ label: '🔄 Start over', run: function () { lead = {}; greet(); } }]);
@@ -373,6 +407,9 @@
 		data.append('action', 'ibc_chat');
 		data.append('name', lead.name || '');
 		data.append('contact', lead.phone || '');
+		data.append('email', lead.email || '');
+		data.append('zip', lead.zip || '');
+		data.append('service', lead.service || '');
 		data.append('message', 'CHAT SIGNUP\nEmail: ' + (lead.email || '') + '\nZIP: ' + (lead.zip || '') + '\nService chosen: ' + (lead.service || '') + '\n(Visitor was sent to the ' + (lead.service || '') + ' checkout page — confirm signup in iRoutes.)');
 		data.append('page', window.location.href);
 		data.append('ibc_website', '');
